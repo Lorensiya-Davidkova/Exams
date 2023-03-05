@@ -1,0 +1,69 @@
+import java.util.Scanner;
+public class Racing {
+    public static void main(String[] args){
+        Scanner scanner=new Scanner(System.in);
+        int N=Integer.parseInt(scanner.nextLine());
+        String carNumber=scanner.nextLine();
+        char matrix[][]=new char[N][N];
+        for(int i=0;i<N;i++){
+            String[] row=scanner.nextLine().split(" ");
+            for(int j=0;j<N;j++){
+                matrix[i][j]=row[j].charAt(0);
+            }
+        }
+        int startI=0;
+        int startJ=0;
+        int kilometres=0;
+        do{
+            String command=scanner.nextLine();
+            if(command.equals("End")){
+                System.out.println("Racing car "+carNumber+" DNF.");
+                matrix[startI][startJ]='C';
+                break;
+            }else if(command.equals("right")){
+                startJ=startJ+1;
+            }else if(command.equals("left")){
+                startJ=startJ-1;
+            }else if(command.equals("down")){
+                startI=startI+1;
+            }else if(command.equals("up")){
+                startI=startI-1;
+            }
+            char kvadradche=matrix[startI][startJ];
+            if(kvadradche=='.'){
+                kilometres=kilometres+10;
+                //System.out.println("Add:10");
+                //System.out.println("Izminati kilometres:"+kilometres);
+            }else if(kvadradche=='T'){
+                kilometres=kilometres+30;
+                matrix[startI][startJ]='.';
+                for(int i=0;i<N;i++){
+                    for(int j=0;j<N;j++){
+                        if(matrix[i][j]=='T'){
+                            startI=i;
+                            startJ=j;
+                            matrix[startI][startJ]='.';
+                            break;
+                        }
+                    }
+                }
+                //System.out.println("Add:30");
+                //System.out.println("Izminati kilometres:"+kilometres);
+            }else if(kvadradche=='F'){
+                System.out.println("Racing car "+carNumber+" finished the stage!");
+                //System.out.println("Add:10");
+                //System.out.println("Izminati kilometres:"+kilometres);
+                kilometres=kilometres+10;
+                matrix[startI][startJ]='C';
+                break;
+            }
+        }while(true);
+        System.out.println("Distance covered "+kilometres+" km.");
+        for(int i=0;i<N;i++){
+            for(int j=0;j<N;j++){
+                System.out.printf("%c",matrix[i][j]);
+            }
+            System.out.println();
+        }
+    }
+}
