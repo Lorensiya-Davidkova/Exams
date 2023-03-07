@@ -1,0 +1,66 @@
+import java.util.*;
+import java.util.Scanner;
+public class P01FlowerWreaths {
+    public static void main(String[] args) {
+        Scanner scanner=new Scanner(System.in);
+
+        String[] first=scanner.nextLine().split(", ");
+        ArrayList<Integer> lilies=new ArrayList<>();
+        for(int i=0;i<first.length;i++){
+            lilies.add(Integer.parseInt(first[i]));
+        }
+
+        String[] second=scanner.nextLine().split(", ");
+        ArrayList<Integer> roses=new ArrayList<>();
+        for(int i=0;i<second.length;i++){
+            roses.add(Integer.parseInt(second[i]));
+        }
+        ArrayList<Integer> stored=new ArrayList<>();
+        int wreaths=0;
+        do{
+            if(lilies.isEmpty() || roses.isEmpty()){
+                break;
+            }
+            int currentLilies=lilies.get(lilies.size()-1);
+            int currentRoses=roses.get(0);
+            if(currentRoses+currentLilies==15){
+                wreaths++;
+                lilies.remove(lilies.size()-1);
+                roses.remove(0);
+            }else if(currentRoses+currentLilies<15){
+                stored.add(currentLilies);
+                stored.add(currentRoses);
+                lilies.remove(lilies.size()-1);
+                roses.remove(0);
+            }else if(currentRoses+currentLilies>15){
+                do{
+                    currentLilies=currentLilies-2;
+                    if(currentRoses+currentLilies==15){
+                        wreaths++;
+                        lilies.remove(lilies.size()-1);
+                        roses.remove(0);
+                        break;
+                    }else if(currentRoses+currentLilies<15){
+                        stored.add(currentLilies);
+                        stored.add(currentRoses);
+                        lilies.remove(lilies.size()-1);
+                        roses.remove(0);
+                        break;
+                    }
+
+                }while(true);
+            }
+        }while(true);
+        int sum=0;
+        for(int i=0;i<stored.size();i++){
+            sum=sum+stored.get(i);
+        }
+        int additionalWreaths=sum/15;
+        wreaths=wreaths+additionalWreaths;
+        if(wreaths>=5){
+            System.out.println("You made it, you are going to the competition with "+wreaths+" wreaths!");
+        }else{
+            System.out.println("You didn't make it, you need "+(5-wreaths)+" wreaths more!");
+        }
+    }
+}
