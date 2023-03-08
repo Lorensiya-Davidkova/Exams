@@ -1,0 +1,126 @@
+import java.util.Scanner;
+public class P02Bomb {
+    public static void main(String[] args){
+        Scanner scanner=new Scanner(System.in);
+        int bombs=0;
+        int counter=0;
+
+        int n=Integer.parseInt(scanner.nextLine());
+        String[] commands=scanner.nextLine().split(",");
+
+        char[][] matrix=new char[n][n];
+        for(int i=0;i<n;i++){
+            String[] line=scanner.nextLine().split(" ");
+            for(int j=0;j<line.length;j++){
+                matrix[i][j]=line[j].charAt(0);
+            }
+        }
+        int indexI=0;
+        int indexJ=0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(matrix[i][j]=='s'){
+                    indexI=i;
+                    indexJ=j;
+                    break;
+                }
+            }
+        }
+        for(int i=0;i<commands.length;i++){
+            String command=commands[i];
+            if(command.equals("right")){
+                if(indexI>=0 && indexI<n && indexJ+1>=0 && indexJ+1<n){
+                    indexJ=indexJ+1;
+                    if(matrix[indexI][indexJ]=='B'){
+                        bombs++;
+                        matrix[indexI][indexJ]='+';
+                        System.out.println("You found a bomb!");
+                    }else if(matrix[indexI][indexJ]=='e'){
+                        counter++;
+                        break;
+                    }
+                }
+            }else if(command.equals("left")){
+                if(indexI>=0 && indexI<n && indexJ-1>=0 && indexJ-1<n){
+                    indexJ=indexJ-1;
+                    if(matrix[indexI][indexJ]=='B'){
+                        bombs++;
+                        matrix[indexI][indexJ]='+';
+                        System.out.println("You found a bomb!");
+                    }else if(matrix[indexI][indexJ]=='e'){
+                        counter++;
+                        break;
+                    }
+                }
+            }else if(command.equals("up")){
+                if(indexI-1>=0 && indexI-1<n && indexJ>=0 && indexJ<n){
+                    indexI=indexI-1;
+                    if(matrix[indexI][indexJ]=='B'){
+                        bombs++;
+                        matrix[indexI][indexJ]='+';
+                        System.out.println("You found a bomb!");
+                    }else if(matrix[indexI][indexJ]=='e'){
+                        counter++;
+                        break;
+                    }
+                }
+            }else if(command.equals("down")){
+                if(indexI+1>=0 && indexI+1<n && indexJ>=0 && indexJ<n){
+                    indexI=indexI+1;
+                    if(matrix[indexI][indexJ]=='B'){
+                        bombs++;
+                        matrix[indexI][indexJ]='+';
+                        System.out.println("You found a bomb!");
+                    }else if(matrix[indexI][indexJ]=='e'){
+                        counter++;
+                        break;
+                    }
+                }
+            }
+            int imaOshteBomb=0;
+            for(int j=0;j<n;j++){
+                for(int k=0;k<n;k++){
+                    if(matrix[j][k]=='B'){
+                        imaOshteBomb++;
+                    }
+                }
+            }
+            if(imaOshteBomb==0){
+                System.out.println("Congratulations! You found all bombs!");
+                break;
+            }
+        }
+        int NotFoundBombs=0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+               if(matrix[i][j]=='B'){
+                  NotFoundBombs++;
+               }
+            }
+        }
+        if(counter>0){
+            System.out.println("END! "+NotFoundBombs+" bombs left on the field");
+        }else {
+            if (NotFoundBombs == 0) {
+                //System.out.println("Congratulations! You found all bombs!");
+            } else {
+                System.out.println(NotFoundBombs + " bombs left on the field. Sapper position: (" + indexI + "," + indexJ + ")");
+            }
+        }
+    }
+}
+
+// up-> +
+// right-> B++
+// right -> +
+//down -> B++
+//up -> +
+// up -> e
+/*
+4
+up,right,right,down,up,up
++ + + e
++ + B +
++ s + B
++ + + +
+ */
