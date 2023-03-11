@@ -1,0 +1,109 @@
+import java.util.Scanner;
+
+public class P02StickyFingers {
+    public static void main(String[] args){
+        Scanner scanner=new Scanner(System.in);
+
+        /*
+        -- започва от позиция D върху матрицата
+        -- ако достигне до края на квадрата=> запазва позицията си=> изписваме съобщението "You cannot leave the town, there is police outside!"
+        -- след успешна промяна на квадрата, върху който е стъпил, променяме и символа на +;
+        -- като стъпи на $ => пресмятаме i * j=> тези пари добавяме в общите и изписваме You successfully stole {calculated money}$."
+        -- като стъпи на P => е хванат и играта приключва => изписваме You got caught with {total stolen money}$, and you are going to jail.=> променяме квадрата на #
+
+        1) претърсваме матрицата за D=> запзаваме startI=i и startJ=j
+        2) започваме да четем команди => проверявма дали не излиза от квадрата
+          - ако излиза принтираме съобщение, но не се мести(връщаме си i и j)
+          - ако не излиза се премества и проверяваме какво е на квадрата $,Р,+, след кото извършва необходимото
+            и променяме предходното квадратче на +(откъдето идва) ВНИМАНИЕ-> ако е P -> промняме Р с #
+         */
+        int N=Integer.parseInt(scanner.nextLine());
+        int money=0;
+        int police=0;
+        char matrix[][]=new char[N][N];
+        String[] commands=scanner.nextLine().split(",");
+        for(int i=0;i<N;i++){
+            String[] chars=scanner.nextLine().split(" ");
+            for(int j=0;j<N;j++){
+                matrix[i][j]=chars[j].charAt(0);
+            }
+        }
+        int startI=0;
+        int startJ=0;
+        for(int i=0;i<N;i++){
+            for(int j=0;j<N;j++){
+                if(matrix[i][j]=='D'){
+                    startI=i;
+                    startJ=j;
+                    break;
+                }
+            }
+        }
+
+        for(int i=0;i<commands.length;i++){
+            String currentCommand=commands[i];
+            if(currentCommand.equals("right")){
+                startJ=startJ+1;
+            }else if(currentCommand.equals("left")) {
+                startJ = startJ - 1;
+            }else if(currentCommand.equals("up")){
+                startI=startI-1;
+            }else if(currentCommand.equals("down")){
+                startI=startI+1;
+            }
+            if(startI==-1 || startI==N || startJ==-1 || startJ==N){
+                System.out.println("You cannot leave the town, there is police outside!");
+                if(currentCommand.equals("right")){
+                    startJ=startJ-1;
+                }else if(currentCommand.equals("left")) {
+                    startJ = startJ + 1;
+                }else if(currentCommand.equals("up")){
+                    startI=startI+1;
+                }else if(currentCommand.equals("down")){
+                    startI=startI-1;
+                }
+            }else{
+                char kvadratche=matrix[startI][startJ];
+                if(kvadratche=='$'){
+                    money=money+(startI*startJ);
+                    System.out.println("You successfully stole "+(startI*startJ)+"$.");
+                    matrix[startI][startJ]='D';
+                }else if(kvadratche=='P'){
+                    System.out.println("You got caught with "+money+"$, and you are going to jail.");
+                    matrix[startI][startJ]='#';
+                    if(currentCommand.equals("right")){
+                        matrix[startI][startJ-1]='+';
+                    }else if(currentCommand.equals("left")) {
+                        matrix[startI][startJ+1]='+';
+                    }else if(currentCommand.equals("up")){
+                        matrix[startI+1][startJ]='+';
+                    }else if(currentCommand.equals("down")){
+                        matrix[startI-1][startJ]='+';
+                    }
+                    police++;
+                    break;
+                }else if(kvadratche=='+'){
+                    matrix[startI][startJ]='D';
+                }
+                if(currentCommand.equals("right")){
+                    matrix[startI][startJ-1]='+';
+                }else if(currentCommand.equals("left")) {
+                    matrix[startI][startJ+1]='+';
+                }else if(currentCommand.equals("up")){
+                    matrix[startI+1][startJ]='+';
+                }else if(currentCommand.equals("down")){
+                    matrix[startI-1][startJ]='+';
+                }
+            }
+        }
+        if(police==0){
+            System.out.println("Your last theft has finished successfully with "+money+"$ in your pocket.");
+        }
+        for(int i=0;i<N;i++){
+            for(int j=0;j<N;j++){
+                System.out.print(matrix[i][j]+" ");
+            }
+            System.out.println();
+        }
+    }
+}
