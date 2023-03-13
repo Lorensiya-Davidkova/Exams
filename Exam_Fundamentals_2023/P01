@@ -1,0 +1,68 @@
+import java.util.Scanner;
+public class Exercise1 {
+    public static void main(String[] args){
+        Scanner scanner=new Scanner(System.in);
+/*        String input="HelloWorld";
+        // move
+
+        //1) чрез substring=> отделяме това, което ще преместваме най-отзад =>!!!!!! ВРЪЩА НИЗ
+        String toConcat=input.substring(0,8);
+        //2) чрез replace => заместваме с ""=>!!!!!! ВРЪЩА НИЗ;
+       // input=input.replace(toConcat,"");
+        //3) конкатенираме
+        //input=input+toConcat;
+        System.out.println(toConcat);
+
+        // INSERT
+        //Insert|2|o
+        //ll He → lloHe
+        // 2->pokazva inseksa
+        String word="Bulgaria";
+        int index=3;
+        String additional="123456";
+        // substring(A,B) => A- pokazva nachalen indeks(vzama se bukvata na tozi indeks), a B-> do koi indeks(be nego towst do
+        // B-1 vkl)
+        String first_part=word.substring(3,5);
+        String second_part=word.substring(index);
+        System.out.println("FP->"+first_part+"   SP->"+second_part+" ADDITIONAL->"+additional);
+        word=first_part+additional+second_part;
+        System.out.println(word);
+
+        String word1="HelloBirdHelPolk";
+        word1=word1.replaceAll("Hel","UUU ");
+        System.out.println(word1);
+*/
+        String line=scanner.nextLine();
+        do{
+            String command=scanner.nextLine();
+            if(command.equals("Decode")){
+                System.out.println(
+                        "The decrypted message is: "+line);
+                break;
+            }
+            String[] commands=command.split("\\|");
+            if(commands[0].equals("Insert")){
+                int startIndex=Integer.parseInt(commands[1]);
+                if(startIndex>=0) {
+                    //System.out.println("HERE");
+                    String additionalChars = commands[2];
+                    //System.out.println("ADD:"+additionalChars);
+                    String first_part = line.substring(0, startIndex);
+                    String second_part = line.substring(startIndex);
+                    line = first_part + additionalChars + second_part;
+                }
+            }else if(commands[0].equals("Move")){
+                int n=Integer.parseInt(commands[1]);// 5
+                // line=HelloWorld->10 chars
+                if(n>=0 && n<=line.length()) {
+                    String backString = line.substring(0, n);
+                    line = line.replaceFirst(backString, "");
+                    line = line + backString;
+                }
+            }else if(commands[0].equals("ChangeAll")){
+                line=line.replaceAll(commands[1],commands[2]);
+            }
+            //System.out.println("======>"+line);
+        }while(true);
+    }
+}
