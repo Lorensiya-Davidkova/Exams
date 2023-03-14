@@ -1,0 +1,37 @@
+import java.util.Arrays;
+import java.util.Scanner;
+public class Lift {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        // започвам да обхождам масива от вагони и питам на всеки вагон:
+        // - ако броят хора е 4=> отивам на следващия
+        // - ако броят хора е под 4=> допълвам до 4, като респективно намалявам чакащите;
+
+        int peopleWaiting = Integer.parseInt(scanner.nextLine());
+
+        String[] arr = scanner.nextLine().split(" ");
+
+        int[] wagons = new int[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            wagons[i] = Integer.parseInt(arr[i]);
+        }
+
+            for (int i = 0; i < wagons.length; i++) {
+                int broiHoraVuvVagon = wagons[i];
+                if (broiHoraVuvVagon < 4) {
+                    int ostavashtiMesta = 4 - broiHoraVuvVagon;
+                    if (peopleWaiting >= ostavashtiMesta) {
+                        wagons[i] = wagons[i] + ostavashtiMesta;
+                        peopleWaiting = peopleWaiting - ostavashtiMesta;
+                    } else {
+                        wagons[i] = wagons[i] + peopleWaiting;
+                        peopleWaiting = 0;
+                    }
+                }
+            }
+            System.out.println("Waiting->"+peopleWaiting);
+            for(int i=0;i<wagons.length;i++){
+                System.out.printf("%d ",wagons[i]);
+            }
+    }
+}
