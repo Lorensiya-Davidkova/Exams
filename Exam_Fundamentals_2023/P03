@@ -1,0 +1,64 @@
+import java.util.*;
+public class Exercise3 {
+    public static void main(String[] args){
+        Scanner scanner=new Scanner(System.in);
+        LinkedHashMap<String,Integer> car_kilometraj=new LinkedHashMap<>();
+        LinkedHashMap<String,Integer> car_gorivo=new LinkedHashMap<>();
+        int n=Integer.parseInt(scanner.nextLine());
+        for(int i=0;i<n;i++){
+            String[] infoCar=scanner.nextLine().split("\\|");
+            String model=infoCar[0];
+            int kilometri=Integer.parseInt(infoCar[1]);
+            int gorivo=Integer.parseInt(infoCar[2]);
+            car_kilometraj.put(model,kilometri);
+            car_gorivo.put(model,gorivo);
+        }
+        do{
+            String command=scanner.nextLine();
+            if(command.equals("Stop")){
+                for(var entry:car_kilometraj.entrySet()){
+                    System.out.printf("%s -> Mileage: %d kms, Fuel in the tank: %d lt.%n",entry.getKey(),entry.getValue(),car_gorivo.get(entry.getKey()));
+                }
+                break;
+            }
+            String[] commands=command.split(" : ");
+            if(commands[0].equals("Drive")){
+                String currentCarM=commands[1];
+                int distanceToDrive=Integer.parseInt(commands[2]);
+                int neobhodimoGorivo=Integer.parseInt(commands[3]);
+                if(car_gorivo.get(currentCarM)<neobhodimoGorivo){
+                    System.out.println("Not enough fuel to make that ride");
+                }else{
+                    car_gorivo.put(currentCarM,car_gorivo.get(currentCarM)-neobhodimoGorivo);
+                    car_kilometraj.put(currentCarM,car_kilometraj.get(currentCarM)+distanceToDrive);
+                    System.out.printf("%s driven for %d kilometers. %d liters of fuel consumed.%n",currentCarM,distanceToDrive,neobhodimoGorivo);
+                }
+                if(car_kilometraj.get(currentCarM)>=100000){
+                    System.out.println("Time to sell the "+currentCarM+"!");
+                    car_kilometraj.remove(currentCarM);
+                    car_gorivo.remove(currentCarM);
+                }
+            }else if(commands[0].equals("Refuel")){
+                String currentCarM=commands[1];
+                int addGorivo=Integer.parseInt(commands[2]);
+                if(car_gorivo.get(currentCarM)+addGorivo>75){
+                    System.out.println(currentCarM+" refueled with "+(75-car_gorivo.get(currentCarM))+" liters");
+                    car_gorivo.put(currentCarM,75);
+                }else{
+                    System.out.println(currentCarM+" refueled with "+addGorivo+" liters");
+                    car_gorivo.put(currentCarM,car_gorivo.get(currentCarM)+addGorivo);
+                }
+            }else if(commands[0].equals("Revert")){
+                String currentCarM=commands[1];
+                int kilometres=Integer.parseInt(commands[2]);
+                int decreaseKilometers=car_kilometraj.get(currentCarM)-kilometres;
+                if(decreaseKilometers<10000){
+                    car_kilometraj.put(currentCarM,10000);
+                }else{
+                    car_kilometraj.put(currentCarM,decreaseKilometers);
+                    System.out.println(currentCarM+" mileage decreased by "+kilometres+ " kilometers");
+                }
+            }
+        }while(true);
+    }
+}
