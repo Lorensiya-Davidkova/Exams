@@ -1,0 +1,40 @@
+import java.util.LinkedHashMap;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Exercise2 {
+    public static void main(String[] args){
+        Scanner scanner=new Scanner(System.in);
+        String line=scanner.nextLine();
+        int product=1;
+        LinkedHashMap<String,Integer> regexes=new LinkedHashMap<>();
+
+        String regex="(?<sym>[:*]{1})\\1(?<inside>[A-Z][a-z]{2,})\\1\\1";
+        Pattern pattern= Pattern.compile(regex);
+        Matcher matcher= pattern.matcher(line);
+
+        String numRegex="[0-9]";
+        Pattern numPattern=Pattern.compile(numRegex);
+        Matcher numMatcher=numPattern.matcher(line);
+        while(matcher.find()){
+            String correct= matcher.group();
+            String inside=matcher.group("inside");
+            int sumASCII=0;
+            for(int i=0;i<inside.length();i++){
+                sumASCII=sumASCII+inside.charAt(i);
+            }
+            regexes.put(correct,sumASCII);
+        }
+        while(numMatcher.find()){
+           product=product*Integer.parseInt(numMatcher.group());
+        }
+        System.out.println("Cool threshold: "+product);
+        System.out.println(regexes.size()+" emojis found in the text. The cool ones are:");
+        for(var entry:regexes.entrySet()){
+            if(entry.getValue()>=product){
+               System.out.println(entry.getKey()+" ");
+            }
+        }
+    }
+}
