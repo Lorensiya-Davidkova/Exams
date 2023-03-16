@@ -1,0 +1,114 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
+public class FoodFinder {
+    public static void main(String[] args) {
+        Scanner scanner=new Scanner(System.in);
+        String[] vowels1=scanner.nextLine().split(" ");
+        String[] consonants1=scanner.nextLine().split(" ");
+
+        ArrayList<Character> vowels=new ArrayList<>();
+        ArrayList<Character> cons=new ArrayList<>();
+
+        for(int i=0;i<vowels1.length;i++){
+            vowels.add(vowels1[i].charAt(0));
+        }
+        for(int i=0;i< consonants1.length;i++){
+            cons.add(consonants1[i].charAt(0));
+        }
+        HashMap<Character,Integer> pear=new HashMap<>();
+        HashMap<Character,Integer> flour=new HashMap<>();
+        HashMap<Character,Integer> pork=new HashMap<>();
+        HashMap<Character,Integer> olive=new HashMap<>();
+        pear.put('p',0);
+        pear.put('e',0);
+        pear.put('a',0);
+        pear.put('r',0);
+        flour.put('f',0);
+        flour.put('l',0);
+        flour.put('o',0);
+        flour.put('u',0);
+        flour.put('r',0);
+        pork.put('p',0);
+        pork.put('o',0);
+        pork.put('r',0);
+        pork.put('k',0);
+        olive.put('o',0);
+        olive.put('l',1);
+        olive.put('i',0);
+        olive.put('v',0);
+        olive.put('e',0);
+        while(!cons.isEmpty()){
+            char currentVowel=vowels.get(0);
+            char currentCons=cons.get(cons.size()-1);
+            if(pear.containsKey(currentVowel)){
+                pear.put(currentVowel,pear.get(currentVowel)+1);
+            }
+            if(pear.containsKey(currentCons)){
+                pear.put(currentCons,pear.get(currentCons)+1);
+            }
+            if(flour.containsKey(currentVowel)){
+                flour.put(currentVowel,flour.get(currentVowel)+1);
+            }
+            if(flour.containsKey(currentCons)){
+                flour.put(currentCons,flour.get(currentCons)+1);
+            }
+            if(pork.containsKey(currentVowel)){
+                pork.put(currentVowel,pork.get(currentVowel)+1);
+            }
+            if(pork.containsKey(currentCons)){
+                pork.put(currentCons,pork.get(currentCons)+1);
+            }
+            if(olive.containsKey(currentVowel)){
+                olive.put(currentVowel,olive.get(currentVowel)+1);
+            }
+            if(olive.containsKey(currentCons)){
+                olive.put(currentCons,olive.get(currentCons)+1);
+            }
+            cons.remove(cons.size()-1);
+            vowels.remove(0);
+            vowels.add(currentVowel);
+        }
+        int flagNoPear=0;
+        int flagNoFlour=0;
+        int flagNoOlive=0;
+        int flagNoPork=0;
+        for(var entry:pear.entrySet()){
+            if(entry.getValue()==0){
+                flagNoPear=1;
+                break;
+            }
+        }
+        for(var entry:flour.entrySet()){
+            if(entry.getValue()==0){
+                flagNoFlour=1;
+                break;
+            }
+        }
+        for(var entry:olive.entrySet()){
+            if(entry.getValue()==0){
+                flagNoOlive=1;
+                break;
+            }
+        }
+        for(var entry:pork.entrySet()){
+            if(entry.getValue()==0){
+                flagNoPork=1;
+                break;
+            }
+        }
+        System.out.println("Words found: "+(4-(flagNoFlour+flagNoOlive+flagNoPear+flagNoPork)));
+        if(flagNoPear==0){
+            System.out.println("pear");
+        }
+        if(flagNoFlour==0){
+            System.out.println("flour");
+        }
+        if(flagNoOlive==0){
+            System.out.println("olive");
+        }
+        if(flagNoPork==0){
+            System.out.println("pork");
+        }
+    }
+}
