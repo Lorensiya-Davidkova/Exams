@@ -1,0 +1,107 @@
+import java.util.HashMap;
+import java.util.Scanner;
+public class PawnWars {
+    public static void main(String[] args){
+        Scanner scanner=new Scanner(System.in);
+        char[][] matrix=new char[8][8];
+
+        for(int i=0;i<8;i++){
+            String row=scanner.nextLine();
+            for(int j=0;j<row.length();j++){
+                matrix[i][j]=row.charAt(j);
+            }
+        }
+        /*for(int i=0;i<8;i++){
+            for(int j=0;j<8;j++){
+                System.out.printf("%c ",matrix[i][j]);
+            }
+            System.out.println();
+        }*/
+        HashMap<Integer,Character> table=new HashMap<>();
+        HashMap<Integer,Integer> rows=new HashMap<>();
+        table.put(0,'a');
+        table.put(1,'b');
+        table.put(2,'c');
+        table.put(3,'d');
+        table.put(4,'e');
+        table.put(5,'f');
+        table.put(6,'g');
+        table.put(7,'h');
+        rows.put(0,8);
+        rows.put(1,7);
+        rows.put(2,6);
+        rows.put(3,5);
+        rows.put(4,4);
+        rows.put(5,3);
+        rows.put(6,2);
+        rows.put(7,1);
+        int whiteI=0;
+        int whiteJ=0;
+        int blackI=0;
+        int blackJ=0;
+        for(int i=0;i<8;i++){
+            for(int j=0;j<8;j++){
+                if(matrix[i][j]=='w'){
+                    whiteI=i;
+                    whiteJ=j;
+                }else if(matrix[i][j]=='b'){
+                    blackI=i;
+                    blackJ=j;
+                }
+            }
+        }
+        int iteraciq=1;
+        do{
+            if(iteraciq%2!=0){
+                //bqla
+                if(matrix[whiteI-1][whiteJ-1]=='b'){
+                    matrix[whiteI][whiteJ]='-';
+                    whiteI--;
+                    whiteJ--;
+                    matrix[whiteI][whiteJ]='w';
+                    System.out.printf("Game over! White capture on %c%d.%n",table.get(whiteJ),rows.get(whiteI));
+                    break;
+                }else if(matrix[whiteI-1][whiteJ+1]=='b'){
+                    matrix[whiteI][whiteJ]='-';
+                    whiteI--;
+                    whiteJ++;
+                    matrix[whiteI][whiteJ]='w';
+                    System.out.printf("Game over! White capture on %c%d.%n",table.get(whiteJ),rows.get(whiteI));
+                    break;
+                }else{
+                    matrix[whiteI][whiteJ]='-';
+                    whiteI--;
+                    matrix[whiteI][whiteJ]='w';
+                    if(whiteI==0){
+                        System.out.println("Game over! White pawn is promoted to a queen at "+table.get(whiteJ)+rows.get(whiteI)+".");
+                        break;
+                    }
+                }
+            }else{
+                //cherna
+                if(matrix[blackI+1][blackJ-1]=='w'){
+                    matrix[blackI][blackJ]='-';
+                    blackI++;
+                    blackJ--;
+                    matrix[blackI][blackJ]='b';
+                    System.out.printf("Game over! Black capture on %c%d.%n",table.get(blackJ),rows.get(blackI));
+                }else if(matrix[blackI+1][blackJ+1]=='b'){
+                    matrix[blackI][blackJ]='-';
+                    blackI++;
+                    blackJ++;
+                    matrix[blackI][blackJ]='b';
+                    System.out.printf("Game over! Black capture on %c%d.%n",table.get(blackJ),rows.get(blackI));
+                }else{
+                    matrix[blackI][blackJ]='-';
+                    blackI++;
+                    matrix[blackI][blackJ]='b';
+                    if(blackI==7){
+                        System.out.println("Game over! Black pawn is promoted to a queen at "+(table.get(blackJ))+rows.get(blackI)+".");
+                        break;
+                    }
+                }
+            }
+            iteraciq++;
+        }while(true);
+    }
+}
