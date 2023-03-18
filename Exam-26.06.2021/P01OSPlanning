@@ -1,0 +1,39 @@
+import java.util.ArrayDeque;
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String[] arrTask=scanner.nextLine().split(", ");
+        ArrayDeque<Integer> tasks=new ArrayDeque<>();
+        for(int i=0;i<arrTask.length;i++){
+            tasks.push(Integer.parseInt(arrTask[i]));
+        }
+        String[] arrThreads=scanner.nextLine().split(" ");
+        ArrayDeque<Integer> threads=new ArrayDeque<>();
+        for(int i=0;i<arrThreads.length;i++){
+            threads.add(Integer.parseInt(arrThreads[i]));
+        }
+        int taskImportant=Integer.parseInt(scanner.nextLine());
+
+        int task1=tasks.peek();
+        int thread1= threads.peek();
+
+        while(task1!=taskImportant){
+            if(thread1>=task1){
+                tasks.pop();
+                threads.remove();
+            }else{
+                threads.remove();
+            }
+            task1=tasks.peek();
+            thread1=threads.peek();
+        }
+        System.out.println("Thread with value "+threads.peek()+" killed task "+tasks.peek());
+        /*for(int task:tasks){
+            System.out.print(task+" ");
+        }*/
+        for(int thread:threads){
+            System.out.print(thread+" ");
+        }
+    }
+}
